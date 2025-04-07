@@ -17,7 +17,7 @@ pub type Result<T> = core::result::Result<T, Error>;
 /// Embedded node that "intrudes" on a structure
 #[derive(Copy, Clone, Debug)]
 pub struct IntrusiveNode {
-    /// offset from &self to struct data. Typically := sizeof(IntrusiveNode)
+    /// pointer to data corresponding to this node
     address_of_data: *const dyn Any,
 
     /// unsafe iterator type

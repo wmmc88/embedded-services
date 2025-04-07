@@ -200,7 +200,7 @@ impl Endpoint {
         self.id
     }
 
-    /// use this when static initialization occurs, internal fields will be validated in register_subscriber() later
+    /// use this when static initialization occurs, internal fields will be validated in register_endpoint() later
     pub const fn uninit(id: EndpointID) -> Self {
         Self {
             node: Node::uninit(),
