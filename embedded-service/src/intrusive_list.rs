@@ -28,6 +28,7 @@ pub struct IntrusiveNode {
 }
 
 /// node type for list allocation. Embed this in the "list wrapper" object, and init with Node::uninit()
+#[derive(Debug)]
 pub struct Node {
     inner: Cell<IntrusiveNode>,
 }

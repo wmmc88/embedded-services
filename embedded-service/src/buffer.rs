@@ -16,7 +16,8 @@ use core::cell::Cell;
 use core::marker::PhantomData;
 use core::ops::Range;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 enum Status {
     None,
     Mutable,
@@ -24,6 +25,8 @@ enum Status {
 }
 
 /// Underlying buffer storage struct
+#[derive(Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Buffer<'a, T> {
     buffer: *mut [T],
     status: Cell<Status>,
@@ -141,14 +144,15 @@ impl<T> Drop for AccessMut<'_, T> {
 }
 
 /// A immutable reference to a buffer
-#[derive(Clone)]
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct SharedRef<'a, T> {
     buffer: &'a Buffer<'a, T>,
     slice: Range<usize>,
 }
 
 impl<'a, T> SharedRef<'a, T> {
-    /// Creates a new immutable buffer refference
+    /// Creates a new immutable buffer reference
     pub fn new(buffer: &'a Buffer<'a, T>, slice: Range<usize>) -> Self {
         Self { buffer, slice }
     }

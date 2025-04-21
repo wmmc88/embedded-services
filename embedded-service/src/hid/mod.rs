@@ -217,11 +217,11 @@ impl MailboxDelegate for Device {
             .ok_or(comms::MailboxDelegateError::MessageNotFound)?;
 
         match message.data {
+            _ if message.id != self.id => Err(comms::MailboxDelegateError::InvalidId),
             MessageData::Request(ref request) => {
                 self.request.signal(request.clone());
                 Ok(())
             }
-            _ if message.id != self.id => Err(comms::MailboxDelegateError::InvalidId),
             _ => Err(comms::MailboxDelegateError::InvalidData),
         }
     }
@@ -238,7 +238,8 @@ pub struct DeviceId(pub u8);
 pub struct ReportId(pub u8);
 
 /// Host to device messages
-#[derive(Clone)]
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Request<'a> {
     /// HID descriptor request
     Descriptor,

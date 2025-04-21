@@ -226,7 +226,7 @@ impl Opcode {
 }
 
 /// Host to device commands, see spec for more details
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[allow(missing_docs)]
 pub enum Command<'a> {

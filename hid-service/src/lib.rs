@@ -3,6 +3,7 @@
 use embedded_services::hid;
 
 pub mod i2c;
+pub mod peripheral_manager;
 
 #[derive(Copy, Clone, Debug)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
