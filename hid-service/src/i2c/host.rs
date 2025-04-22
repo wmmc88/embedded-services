@@ -2,6 +2,7 @@
 use core::borrow::{Borrow, BorrowMut};
 use core::cell::RefCell;
 
+use defmt::info;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::signal::Signal;
 use embassy_time::{with_timeout, Duration};
@@ -16,7 +17,8 @@ use crate::Error;
 const DEVICE_RESPONSE_TIMEOUT_MS: u64 = 200;
 const DATA_READ_TIMEOUT_MS: u64 = 50;
 
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub enum Access {
     Read,
     Write,
@@ -257,7 +259,9 @@ impl<B: I2cSlaveAsync> Host<B> {
                 | hid::Response::InputReport(data)
                 | hid::Response::FeatureReport(data) => {
                     let bytes = data.borrow();
-                    self.write_bus(DEVICE_RESPONSE_TIMEOUT_MS, bytes.borrow()).await
+                    let bytes: &[u8] = bytes.borrow();
+                    info!("SENDING HID RESPONSE {:?}", bytes);
+                    self.write_bus(DEVICE_RESPONSE_TIMEOUT_MS, bytes).await
                 }
                 hid::Response::Command(cmd) => match cmd {
                     hid::CommandResponse::GetIdle(freq) => {
