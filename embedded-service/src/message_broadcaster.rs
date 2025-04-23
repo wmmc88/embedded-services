@@ -8,6 +8,7 @@
 use core::{fmt::{self, Debug}, marker::PhantomData};
 
 use embassy_sync::{blocking_mutex::raw::NoopRawMutex, channel::Channel, signal::Signal};
+use defmt::error;
 
 use crate::{intrusive_list, IntrusiveList, Node, NodeContainer};
 
