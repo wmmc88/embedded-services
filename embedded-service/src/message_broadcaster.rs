@@ -143,6 +143,7 @@ impl<T: Clone + Debug + 'static> Listen<T> for SignalListener<T> {
         if self.signal.signaled() {
             self.signal.signal(message.clone());
         } else {
+            error!("signal listener already signaled!");
             // TODO(melvin): Signal already present. Listener full. propagate full error up to caller to tell it to backoff?
         }
     }
@@ -194,6 +195,7 @@ impl<T: Clone + Debug + 'static> Listen<T> for ChannelListener<T> {
         match self.channel.try_send(message.clone()) {
             Ok(()) => return,
             Err(_) => {
+                error!("channel listener already full!");
                 // TODO(melvin): Channel is full. Propagate error up to caller to tell it to backoff?
             }
         }
